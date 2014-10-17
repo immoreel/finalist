@@ -1,0 +1,25 @@
+From ed0bec10e04296c1bca42f48e4c931ce67e3cc37 Mon Sep 17 00:00:00 2001
+From: Wouter <wouter@feka.nl>
+Date: Fri, 17 Oct 2014 14:06:04 +0200
+Subject: [PATCH] added 5mins to import frequency
+
+---
+ includes/FeedsImporter.inc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/includes/FeedsImporter.inc b/includes/FeedsImporter.inc
+index 31be6b2..637e0ce 100644
+--- a/includes/FeedsImporter.inc
++++ b/includes/FeedsImporter.inc
+@@ -232,7 +232,7 @@ class FeedsImporter extends FeedsConfigurable {
+       '#default_value' => $config['content_type'],
+     );
+     $cron_required =  ' ' . l(t('Requires cron to be configured.'), 'http://drupal.org/cron', array('attributes' => array('target' => '_new')));
+-    $period = drupal_map_assoc(array(900, 1800, 3600, 10800, 21600, 43200, 86400, 259200, 604800, 2419200), 'format_interval');
++    $period = drupal_map_assoc(array(300, 900, 1800, 3600, 10800, 21600, 43200, 86400, 259200, 604800, 2419200), 'format_interval');
+     foreach ($period as &$p) {
+       $p = t('Every !p', array('!p' => $p));
+     }
+-- 
+1.8.4.2
+
