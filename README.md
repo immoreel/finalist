@@ -7,3 +7,6 @@ In the folder /custom you'll find:
 * createEntities.php - imports entities from json feed, called by cron  
 * kml.php - maps routes to open layers (converts json feed to kml) displaying current velocities on map  
 
+###Cron definition:
+```0	*	*	*	*	wget -O - -q -t 1 http://project.immoreel.nl/custom/createEntities.php```
+
