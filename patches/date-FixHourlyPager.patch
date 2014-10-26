@@ -1,0 +1,65 @@
+From fa258c41a1b75d31ec575083654793fed9a73a66 Mon Sep 17 00:00:00 2001
+From: immoreel <wouter@wouters-MacBook-Air.local>
+Date: Sun, 26 Oct 2014 21:38:45 +0100
+Subject: [PATCH] fixed hourly pager
+
+---
+ date_views/theme/theme.inc | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/date_views/theme/theme.inc b/date_views/theme/theme.inc
+index cb01e32..eb5d209 100644
+--- a/date_views/theme/theme.inc
++++ b/date_views/theme/theme.inc
+@@ -43,7 +43,7 @@ function template_preprocess_date_views_pager(&$vars) {
+   }
+   $date_info = $view->date_info;
+   // Make sure we have some sort of granularity.
+-  $granularity = !empty($date_info->granularity) ? $date_info->granularity : 'month';
++  $granularity = !empty($date_info->granularity) ? $date_info->granularity : 'month';  
+   $pos = $date_info->date_arg_pos;
+   if (!empty($input)) {
+     $id = $plugin->options['date_id'];
+@@ -70,7 +70,7 @@ function template_preprocess_date_views_pager(&$vars) {
+     date_modify($prev_date, '-1 ' . $granularity);
+     $next_date = clone($min_date);
+     date_modify($next_date, '+1 ' . $granularity);
+-    $format = array('year' => 'Y', 'month' => 'Y-m', 'day' => 'Y-m-d');
++    $format = array('year' => 'Y', 'month' => 'Y-m', 'day' => 'Y-m-d', 'hour' =>'Y-m-d\TG');
+     switch ($granularity) {
+       case 'week':
+         $next_week = date_week(date_format($next_date, 'Y-m-d'));
+@@ -129,6 +129,10 @@ function template_preprocess_date_views_pager(&$vars) {
+       $prev_title = t('Navigate to previous day');
+       $next_title = t('Navigate to next day');
+       break;
++    case 'hour':
++        $prev_title = t('Navigate to previous hour');
++        $next_title = t('Navigate to next hour');
++        break;
+   }
+   $vars['prev_options']['attributes'] += array('title' => $prev_title);
+   $vars['next_options']['attributes'] += array('title' => $next_title);
+@@ -161,6 +165,7 @@ function template_preprocess_date_views_pager(&$vars) {
+  */
+ function theme_date_nav_title($params) {
+   $granularity = $params['granularity'];
++  // dpm($params);
+   $view = $params['view'];
+   $date_info = $view->date_info;
+   $link = !empty($params['link']) ? $params['link'] : FALSE;
+@@ -187,6 +192,11 @@ function theme_date_nav_title($params) {
+       $title = t('Week of @date', array('@date' => date_format_date($date_info->min_date, 'custom', $format)));
+       $date_arg = $date_info->year . '-W' . date_pad($date_info->week);
+       break;
++	case 'hour':
++      $format = !empty($format) ? $format : (empty($date_info->mini) ? $format_with_year : $format_without_year);
++      $title = date_format_date($date_info->min_date, 'custom', 'l, F j, Y G:i');
++      $date_arg = $date_info->year . '-' . date_pad($date_info->month) . '-' . date_pad($date_info->day) ;
++    break;
+   }
+   if (!empty($date_info->mini) || $link) {
+     // Month navigation titles are used as links in the mini view.
+-- 
+1.8.4.2
+
